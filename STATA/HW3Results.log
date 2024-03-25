@@ -1,0 +1,155 @@
+----------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/guetyrukashaza/Downloads/ECON 424/STATA/HW3Results.log
+  log type:  text
+ opened on:  24 Oct 2023, 10:27:03
+
+. 
+. *Q1
+. *gen age = (examdate-birthdate)/365 
+. 
+.  *gen farmer_dummy = (headocc == 1)
+. 
+.  *gen worker_dummy = (headocc == 2)
+. 
+. * gen teacher_dummy = (headocc == 3)
+. 
+. * gen village_leader_dummy = (headocc == 6)
+. 
+. 
+. *gen years_of_education = .
+. 
+. 
+. *replace years_of_education = 16 if headeduc == 1
+. *replace years_of_education = 14 if headeduc == 2
+. *replace years_of_education = 12 if inlist(headeduc, 3, 4, 5)
+. *replace years_of_education = 9 if headeduc == 6
+. *replace years_of_education = 6 if headeduc == 7
+. *replace years_of_education = 0 if headeduc == 8
+. 
+. *gen farmer_dummy = (headocc == 1)
+. *gen worker_dummy = (headocc == 2)
+. *gen teacher_dummy = (headocc == 3)
+. *gen village_leader_dummy = (headocc == 6)
+. 
+. 
+. 
+. *gen zavetest = (avg_acuity - r(mean)) / r(sd)gen headeducy=.
+. *replace headeducy=16 if headeduc==1
+. *replace headeducy=14 if headeduc==2
+. 
+. *gen avetest = (chinese04s2+math04s2+science04s2)/3
+. *sum avetest
+. *gen testz = (79.43455)/8.65878 
+. tab testz
+
+      testz |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   9.173873 |      3,134      100.00      100.00
+------------+-----------------------------------
+      Total |      3,134      100.00
+
+. 
+. *q2
+. *histogram avg_acuity
+. 
+. *Q3
+. regress avg_acuity weight grade years_of_education
+
+      Source |       SS           df       MS      Number of obs   =     3,125
+-------------+----------------------------------   F(3, 3121)      =     25.20
+       Model |  5.55974695         3  1.85324898   Prob > F        =    0.0000
+    Residual |  229.483292     3,121   .07352877   R-squared       =    0.0237
+-------------+----------------------------------   Adj R-squared   =    0.0227
+       Total |  235.043039     3,124  .075237849   Root MSE        =    .27116
+
+------------------------------------------------------------------------------------
+        avg_acuity | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------------+----------------------------------------------------------------
+            weight |  -.0004654      .0008    -0.58   0.561     -.002034    .0011033
+             grade |  -.0495871    .006801    -7.29   0.000     -.062922   -.0362521
+years_of_education |   -.003416   .0018464    -1.85   0.064    -.0070364    .0002043
+             _cons |   4.848754   .0336485   144.10   0.000     4.782778    4.914729
+------------------------------------------------------------------------------------
+
+. 
+. *Q4
+. regress received avg_acuity farmer_dummy worker_dummy had_glasses_dummy headocc years_of_education townincpc
+
+      Source |       SS           df       MS      Number of obs   =     3,125
+-------------+----------------------------------   F(7, 3117)      =         .
+       Model |   684.27392         7  97.7534171   Prob > F        =         .
+    Residual |           0     3,117           0   R-squared       =    1.0000
+-------------+----------------------------------   Adj R-squared   =    1.0000
+       Total |   684.27392     3,124  .219037746   Root MSE        =         0
+
+------------------------------------------------------------------------------------
+          received | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------------+----------------------------------------------------------------
+        avg_acuity |   2.33e-16          .        .       .            .           .
+      farmer_dummy |  -3.15e-16          .        .       .            .           .
+      worker_dummy |  -2.34e-16          .        .       .            .           .
+ had_glasses_dummy |          1          .        .       .            .           .
+           headocc |  -6.20e-17          .        .       .            .           .
+years_of_education |  -1.89e-18          .        .       .            .           .
+         townincpc |  -1.72e-21          .        .       .            .           .
+             _cons |  -7.77e-16          .        .       .            .           .
+------------------------------------------------------------------------------------
+
+. 
+. *Q5
+. * regress eye_acuity_gender 
+. regress received avg_acuity farmer_dummy worker_dummy had_glasses_dummy headocc years_of_education townincpc eye_acuity_gender 
+
+      Source |       SS           df       MS      Number of obs   =     3,125
+-------------+----------------------------------   F(8, 3116)      =         .
+       Model |   684.27392         8    85.53424   Prob > F        =         .
+    Residual |           0     3,116           0   R-squared       =    1.0000
+-------------+----------------------------------   Adj R-squared   =    1.0000
+       Total |   684.27392     3,124  .219037746   Root MSE        =         0
+
+------------------------------------------------------------------------------------
+          received | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------------+----------------------------------------------------------------
+        avg_acuity |   2.30e-16          .        .       .            .           .
+      farmer_dummy |  -3.12e-16          .        .       .            .           .
+      worker_dummy |  -2.30e-16          .        .       .            .           .
+ had_glasses_dummy |          1          .        .       .            .           .
+           headocc |  -6.13e-17          .        .       .            .           .
+years_of_education |  -1.89e-18          .        .       .            .           .
+         townincpc |  -1.84e-21          .        .       .            .           .
+ eye_acuity_gender |   4.61e-18          .        .       .            .           .
+             _cons |  -7.77e-16          .        .       .            .           .
+------------------------------------------------------------------------------------
+
+. 
+. *Q6
+. regress math04s2 science04s2 female testz
+note: testz omitted because of collinearity.
+
+      Source |       SS           df       MS      Number of obs   =     3,094
+-------------+----------------------------------   F(2, 3091)      =    292.81
+       Model |  72553.2202         2  36276.6101   Prob > F        =    0.0000
+    Residual |   382953.39     3,091  123.893041   R-squared       =    0.1593
+-------------+----------------------------------   Adj R-squared   =    0.1587
+       Total |   455506.61     3,093  147.270162   Root MSE        =    11.131
+
+------------------------------------------------------------------------------
+    math04s2 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ science04s2 |   .4913628   .0203292    24.17   0.000     .4515027     .531223
+      female |   .4654589   .4004161     1.16   0.245    -.3196496    1.250567
+       testz |          0  (omitted)
+       _cons |   38.79192   1.666049    23.28   0.000     35.52525     42.0586
+------------------------------------------------------------------------------
+
+. 
+. 
+. *Close the log file
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/guetyrukashaza/Downloads/ECON 424/STATA/HW3Results.log
+  log type:  text
+ closed on:  24 Oct 2023, 10:27:04
+----------------------------------------------------------------------------------------------------------------------------------------

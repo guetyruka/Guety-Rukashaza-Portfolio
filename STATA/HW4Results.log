@@ -1,0 +1,211 @@
+-------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/guetyrukashaza/Downloads/ECON 424/STATA/HW4Results.log
+  log type:  text
+ opened on:  13 Nov 2023, 23:49:29
+
+. 
+. *Q1
+. 
+. tsset year
+
+Time variable: year, 1950 to 2011
+        Delta: 1 unit
+
+. 
+. gen realmanuf = DollarNom / GDPPriceIndex
+(24 missing values generated)
+
+. 
+. tsset year
+
+Time variable: year, 1950 to 2011
+        Delta: 1 unit
+
+. tsline realmanuf
+
+. 
+. 
+. 
+. *graph export "manufacturing_production.png", replace
+. 
+. 
+. gen ln_realmanuf = log(realmanuf)
+(24 missing values generated)
+
+. 
+. *tsline realmanuf, title("Real Manufacturing Over Time") 
+.     *ytitle("Real Manufacturing") xtitle("Year")
+.         
+. *tsline ln_realmanuf, title("Logged Real Manufacturing Over Time")
+.     *ytitle("Logged Real Manufacturing") xtitle("Year")
+. 
+. *tsline ln_realmanuf, title("Natural Log of Real Manufacturing Value") 
+.    *xlabel(, format(%ty)) ylabel(, format(%10.0fc)) legend(off)
+. 
+. 
+. *Q2
+. regress ln_realmanuf year
+
+      Source |       SS           df       MS      Number of obs   =        38
+-------------+----------------------------------   F(1, 36)        =      8.82
+       Model |   .18231212         1   .18231212   Prob > F        =    0.0053
+    Residual |  .744542228        36  .020681729   R-squared       =    0.1967
+-------------+----------------------------------   Adj R-squared   =    0.1744
+       Total |  .926854348        37  .025050118   Root MSE        =    .14381
+
+------------------------------------------------------------------------------
+ln_realmanuf | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        year |   .0063165   .0021274     2.97   0.005     .0020018    .0106311
+       _cons |  -12.54165   4.236878    -2.96   0.005    -21.13444   -3.948863
+------------------------------------------------------------------------------
+
+. 
+. predict lMANRPr, xb
+
+. predict lMANRRes, res
+(24 missing values generated)
+
+. 
+. scatter ln_realmanuf year || line lMANRPr year, title("Scatter Plot with Regression Line") ///
+>     xtitle("ln_realmanuf") ytitle("Year") ///
+>   
+
+. 
+. *Q3
+. regress lMANRRes L1.lMANRRes
+
+      Source |       SS           df       MS      Number of obs   =        37
+-------------+----------------------------------   F(1, 35)        =    161.11
+       Model |   .57854604         1   .57854604   Prob > F        =    0.0000
+    Residual |  .125682007        35  .003590914   R-squared       =    0.8215
+-------------+----------------------------------   Adj R-squared   =    0.8164
+       Total |  .704228047        36   .01956189   Root MSE        =    .05992
+
+------------------------------------------------------------------------------
+    lMANRRes | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lMANRRes |
+         L1. |   .9181984   .0723386    12.69   0.000     .7713432    1.065054
+             |
+       _cons |  -.0112683   .0098625    -1.14   0.261    -.0312902    .0087536
+------------------------------------------------------------------------------
+
+. 
+. *Q4
+. regress L1.lMANRRes L2.lMANRRes 
+
+      Source |       SS           df       MS      Number of obs   =        37
+-------------+----------------------------------   F(1, 35)        =    161.11
+       Model |   .57854604         1   .57854604   Prob > F        =    0.0000
+    Residual |  .125682007        35  .003590914   R-squared       =    0.8215
+-------------+----------------------------------   Adj R-squared   =    0.8164
+       Total |  .704228047        36   .01956189   Root MSE        =    .05992
+
+------------------------------------------------------------------------------
+  L.lMANRRes | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lMANRRes |
+         L2. |   .9181984   .0723386    12.69   0.000     .7713432    1.065054
+             |
+       _cons |  -.0112683   .0098625    -1.14   0.261    -.0312902    .0087536
+------------------------------------------------------------------------------
+
+. 
+. regress L1.lMANRRes L2.lMANRRes L3.lMANRRes
+
+      Source |       SS           df       MS      Number of obs   =        36
+-------------+----------------------------------   F(2, 33)        =    124.74
+       Model |  .604691053         2  .302345527   Prob > F        =    0.0000
+    Residual |  .079986367        33  .002423829   R-squared       =    0.8832
+-------------+----------------------------------   Adj R-squared   =    0.8761
+       Total |   .68467742        35  .019562212   Root MSE        =    .04923
+
+------------------------------------------------------------------------------
+  L.lMANRRes | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lMANRRes |
+         L2. |   1.471089   .1408426    10.44   0.000     1.184543    1.757636
+         L3. |  -.6009411   .1408555    -4.27   0.000    -.8875137   -.3143684
+             |
+       _cons |  -.0037523   .0083447    -0.45   0.656    -.0207297    .0132251
+------------------------------------------------------------------------------
+
+. 
+. *Q5
+. corrgram lMANRRes
+
+                                          -1       0       1 -1       0       1
+ LAG       AC       PAC      Q     Prob>Q  [Autocorrelation]  [Partial autocor]
+-------------------------------------------------------------------------------
+1        0.8446   0.9182   29.303  0.0000          |------            |------- 
+2        0.6256  -0.6009   45.828  0.0000          |-----         ----|        
+3        0.3744   0.0041   51.915  0.0000          |--                |        
+4        0.1316  -0.2007    52.69  0.0000          |-                -|        
+5       -0.0767  -0.1804   52.961  0.0000          |                 -|        
+6       -0.2156  -0.0052   55.168  0.0000         -|                  |        
+7       -0.2810  -0.0376   59.039  0.0000        --|                  |        
+8       -0.2839  -0.2345   63.121  0.0000        --|                 -|        
+9       -0.2688  -0.2996   66.907  0.0000        --|                --|        
+10      -0.2645   0.1188   70.706  0.0000        --|                  |        
+11      -0.2472   0.2022   74.147  0.0000         -|                  |-       
+12      -0.2363  -0.4804    77.41  0.0000         -|               ---|        
+13      -0.2370  -0.1000   80.826  0.0000         -|                  |        
+14      -0.2423  -0.2364   84.544  0.0000         -|                 -|        
+15      -0.2238  -0.0695   87.853  0.0000         -|                  |        
+16      -0.1885  -0.2045   90.307  0.0000         -|                 -|        
+17      -0.1661  -0.0677   92.305  0.0000         -|                  |        
+
+. 
+. *Q6
+. gen pct_change_MANValAdded = (MANValAdded / L1.MANValAdded - 1) * 100
+(1 missing value generated)
+
+. 
+. regress pct_change_MANValAdded
+
+      Source |       SS           df       MS      Number of obs   =        61
+-------------+----------------------------------   F(0, 60)        =      0.00
+       Model |           0         0           .   Prob > F        =         .
+    Residual |   1655.0783        60  27.5846383   R-squared       =    0.0000
+-------------+----------------------------------   Adj R-squared   =    0.0000
+       Total |   1655.0783        60  27.5846383   Root MSE        =    5.2521
+
+------------------------------------------------------------------------------
+pct_change~d | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       _cons |   5.414168   .6724635     8.05   0.000     4.069041    6.759295
+------------------------------------------------------------------------------
+
+. 
+. *twoway (scatter pct_change_MANValAdded L1.MANValAdded) (lfit pct_change_MANValAdded L1.MANValA
+> dded)
+. 
+. *Q7
+. regress MANValAdded GoodsIMP2005 
+
+      Source |       SS           df       MS      Number of obs   =        62
+-------------+----------------------------------   F(1, 60)        =    605.63
+       Model |  17104650.9         1  17104650.9   Prob > F        =    0.0000
+    Residual |  1694564.51        60  28242.7419   R-squared       =    0.9099
+-------------+----------------------------------   Adj R-squared   =    0.9084
+       Total |  18799215.4        61  308183.859   Root MSE        =    168.06
+
+------------------------------------------------------------------------------
+ MANValAdded | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+GoodsIMP2005 |   .9064459   .0368331    24.61   0.000     .8327687     .980123
+       _cons |   201.5836    29.6742     6.79   0.000     142.2263    260.9408
+------------------------------------------------------------------------------
+
+. *twoway (scatter MANValAdded GoodsIMP2005) (lfit MANValAdded GoodsIMP2005)
+. 
+. *Close the log file
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/guetyrukashaza/Downloads/ECON 424/STATA/HW4Results.log
+  log type:  text
+ closed on:  13 Nov 2023, 23:49:30
+-------------------------------------------------------------------------------------------------

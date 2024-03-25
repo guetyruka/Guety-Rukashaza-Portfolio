@@ -1,0 +1,91 @@
+---------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/guetyrukashaza/Downloads/ECON 424/STATA/HW5Results.log
+  log type:  text
+ opened on:   4 Dec 2023, 21:05:06
+
+. 
+. 
+. 
+.  *gen perc_change_edu = ((sch2010 - sch1960) / sch1960) * 100
+.  *gen abs_change_in_education = (sch2010 - sch1960) 
+. 
+.  *generate perc_change_urban = ((ur2013 - ur1960) / ur1960) * 100
+. * generate abs_change_urban = (ur2013 - ur1960) 
+. 
+. * generate perc_changefertility = ((TFR2013 - TFR1960) / TFR1960) *100
+.  *generate abs_changefertility = (TFR2013 - TFR1960) 
+. 
+.  *generate infant_mort = ((IMR2013 - IMR1960) / IMR1960) * 100
+.  *generate inf_mort = (IMR2013 - IMR1960)
+.  
+.  *generate ln_gdp_before = ln(gdp1960)
+.  *generate ln_gdp_after = ln(gdp2013)
+.  
+.  *generate perc_change_ln_gdp = ((ln_gdp_after - ln_gdp_before) / ln_gdp_before) * 10
+> 0
+.  *generate abs_change_ln_gdp = (ln_gdp_after - ln_gdp_before) 
+.  
+.  
+.  *generate exposure = ((expo - effort) / effort) *100
+. 
+.  regress abs_changefertility expo abs_change_in_education abs_change_urban abs_change
+> _ln_gdp inf_mort effort fundr
+
+      Source |       SS           df       MS      Number of obs   =        22
+-------------+----------------------------------   F(7, 14)        =      3.40
+       Model |  15.9321177         7  2.27601681   Prob > F        =    0.0246
+    Residual |  9.38440495        14   .67031464   R-squared       =    0.6293
+-------------+----------------------------------   Adj R-squared   =    0.4440
+       Total |  25.3165226        21   1.2055487   Root MSE        =    .81873
+
+--------------------------------------------------------------------------------------
+ abs_changefertility | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+---------------------+----------------------------------------------------------------
+                expo |  -.0497673   .0137216    -3.63   0.003    -.0791971   -.0203374
+abs_change_in_educ~n |   .2168781   .2277704     0.95   0.357    -.2716408    .7053971
+    abs_change_urban |   -.037139   .0189729    -1.96   0.071    -.0778319    .0035539
+   abs_change_ln_gdp |  -.1762314    .413469    -0.43   0.676    -1.063034    .7105715
+            inf_mort |   .0082438   .0053713     1.53   0.147    -.0032765    .0197642
+              effort |   .0014243   .0246376     0.06   0.955    -.0514182    .0542667
+               fundr |  -.0088971   .0074803    -1.19   0.254    -.0249406    .0071465
+               _cons |   .5822345    1.30589     0.45   0.663    -2.218622    3.383091
+--------------------------------------------------------------------------------------
+
+. 
+.  regress perc_changefertility  expo perc_change_edu perc_change_urban perc_change_ln_
+> gdp infant_mort effort fundr
+
+      Source |       SS           df       MS      Number of obs   =        22
+-------------+----------------------------------   F(7, 14)        =      8.07
+       Model |  3963.74257         7  566.248938   Prob > F        =    0.0005
+    Residual |  981.921757        14  70.1372684   R-squared       =    0.8015
+-------------+----------------------------------   Adj R-squared   =    0.7022
+       Total |  4945.66433        21  235.507825   Root MSE        =    8.3748
+
+------------------------------------------------------------------------------------
+perc_changeferti~y | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------------+----------------------------------------------------------------
+              expo |  -.2150197   .1511174    -1.42   0.177    -.5391342    .1090949
+   perc_change_edu |   .0000912   .0025566     0.04   0.972    -.0053922    .0055746
+ perc_change_urban |  -.0029626   .0116184    -0.25   0.802    -.0278816    .0219564
+perc_change_ln_gdp |  -.1805996   .2887687    -0.63   0.542    -.7999469    .4387477
+       infant_mort |   .7710411   .1706856     4.52   0.000     .4049569    1.137125
+            effort |   .1937541   .2538184     0.76   0.458    -.3506323    .7381404
+             fundr |  -.1768518   .0830273    -2.13   0.051    -.3549276    .0012241
+             _cons |   19.42823   13.68918     1.42   0.178    -9.932135     48.7886
+------------------------------------------------------------------------------------
+
+.  
+. 
+. 
+. 
+. 
+. *Close the log file
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/guetyrukashaza/Downloads/ECON 424/STATA/HW5Results.log
+  log type:  text
+ closed on:   4 Dec 2023, 21:05:06
+---------------------------------------------------------------------------------------
